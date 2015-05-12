@@ -61,9 +61,15 @@ function content_extra_fields_node_view($node, $view_mode, $langcode) {
           }
         }
         else {
+          // Add the comments and links.
           if (!empty($node->content[$field_name])) {
             $node->content[$name] = $node->content[$field_name];
           }
+        }
+        // Add wrappers. Not really needed but help with testing.
+        if (!empty($node->content[$name])) {
+          $node->content[$name]['#prefix'] = '<div class="field content-extra-field-' . $field_name . '">';
+          $node->content[$name]['#suffix'] = '</div>';
         }
       }
     }

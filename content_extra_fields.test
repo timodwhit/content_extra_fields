@@ -1,0 +1,53 @@
+<?php
+/**
+ * @file
+ * Simpletest case for content_extra_fields module.
+ */
+
+/**
+ * Functionality tests of the content extra fields module.
+ *
+ * @ingroup content_extra_fields
+ */
+class ContentExtraFieldsTestCase extends DrupalWebTestCase {
+
+  protected $privileged_user;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getInfo() {
+    // Note: getInfo() strings are not translated with t().
+    return array(
+      'name' => 'Content Extra Fields',
+      'description' => 'Ensure that the content_extra_fields is replacing the variables.',
+      'group' => 'Content Extra Fields',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    // Enable emoji scrub.
+    parent::setUp(array('content_extra_fields'));
+    // Create and log in our privileged user.
+    $this->privileged_user = $this->drupalCreateUser(array(
+      'create article content',
+    ));
+    $this->drupalLogin($this->privileged_user);
+  }
+
+  /**
+   * Tests the replacement of the html.
+   */
+  public function testContentExtraFieldsArticle() {
+    // Create node to edit.
+    $edit = array();
+    $edit['title'] = $this->randomName(8);
+    $this->drupalPost('node/add/article', $edit, t('Save'));
+    $this->assertRaw('<div class="field field-extra-field content-extra-fields-links">', 'The links have been replaced.');
+    $this->assertRaw('<div class="field field-extra-field content-extra-fields-submitted">', 'The byline has been replaced');
+    $this->assertRaw('<div class="field field-extra-field content-extra-fields-comments">', 'The comments have been replaced');
+  }
+}

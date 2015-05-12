@@ -1,3 +1,4 @@
 name = Content Extra Fields
 description = Turns links and comments into the extra fields
 core = 7.x
+files[] = content_extra_fields.test
