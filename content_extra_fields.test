@@ -11,7 +11,7 @@
  */
 class ContentExtraFieldsTestCase extends DrupalWebTestCase {
 
-  protected $privileged_user;
+  protected $privilegedUser;
 
   /**
    * {@inheritdoc}
@@ -32,10 +32,10 @@ class ContentExtraFieldsTestCase extends DrupalWebTestCase {
     // Enable emoji scrub.
     parent::setUp(array('content_extra_fields'));
     // Create and log in our privileged user.
-    $this->privileged_user = $this->drupalCreateUser(array(
+    $this->privilegedUser = $this->drupalCreateUser(array(
       'create article content',
     ));
-    $this->drupalLogin($this->privileged_user);
+    $this->drupalLogin($this->privilegedUser);
   }
 
   /**
@@ -50,4 +50,5 @@ class ContentExtraFieldsTestCase extends DrupalWebTestCase {
     $this->assertRaw('<div class="field field-extra-field content-extra-fields-submitted">', 'The byline has been replaced');
     $this->assertRaw('<div class="field field-extra-field content-extra-fields-comments">', 'The comments have been replaced');
   }
+
 }
