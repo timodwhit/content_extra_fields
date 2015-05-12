@@ -1,0 +1,4 @@
+name = Content Extra Fields
+description = Turns links and comments into the extra fields
+core = 7.x
+version = 7.x-1.0

@@ -1,0 +1,92 @@
+<?php
+/**
+ * @file
+ * Content Extra Fields main file.
+ */
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function content_extra_fields_field_extra_fields() {
+  $node_types = node_type_get_types();
+  foreach ($node_types as $node_type => $type_obj) {
+    $extra['node'][$node_type] = array(
+      'display' => array(
+        'content_extra_fields_links' => array(
+          'label' => t('Links'),
+          'description' => t('Links typically found in the node.tpl'),
+          'weight' => 100,
+        ),
+        'content_extra_fields_comments' => array(
+          'label' => t('Comments'),
+          'description' => t('Comments typically found in the node.tpl'),
+          'weight' => 150,
+        ),
+        'content_extra_fields_submitted' => array(
+          'label' => t('Submitted'),
+          'description' => t('Byline typically found in the node.tpl'),
+          'weight' => 0,
+        )
+      )
+    );
+  }
+
+  return $extra;
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function content_extra_fields_node_view($node, $view_mode, $langcode) {
+  $extrafields = field_extra_fields_get_display('node', $node->type, $view_mode);
+  // Loop through the extra fields.
+  foreach ($extrafields as $name => $extrafield) {
+    // Check if they are part of this module.
+    $mod_name = 'content_extra_fields';
+    if (substr($name, 0, strlen($mod_name)) == 'content_extra_fields') {
+      if (!empty($extrafield['visible'])) {
+        // If they are grab the content based on the information.
+        $field_name = str_replace($mod_name . '_', '', $name);
+        if ($field_name == 'submitted') {
+          // Display post information only on certain node types.
+          if (variable_get('node_submitted_' . $node->type, TRUE)) {
+            // This processing and format is grabbed from node.module.
+            $date = format_date($node->created);
+            $username = theme('username', array('account' => $node));
+            $submitted = t('Submitted by !username on !datetime', array('!username' => $username, '!datetime' => $date));
+            // Add as a field.
+            $node->content[$name] = array(
+              '#markup' => '<div class="submitted">' . $submitted . '</div>',
+            );
+          }
+        }
+        else {
+          if (!empty($node->content[$field_name])) {
+            $node->content[$name] = $node->content[$field_name];
+          }
+        }
+      }
+    }
+    else {
+      continue;
+    }
+  }
+}
+
+/**
+ * Implements template_preprocess_node().
+ */
+function content_extra_fields_preprocess_node(&$variables) {
+  // Unset the variables if they exist
+  if (!empty($variables['content']['links'])) {
+    $variables['content']['links'] = array();
+  }
+  if (!empty($variables['content']['comments'])) {
+    $variables['content']['comments'] = array();
+  }
+  if (!empty($variables['submitted'])) {
+    $variables['display_submitted'] = FALSE;
+    $variables['submitted'] = '';
+  }
+}
+
