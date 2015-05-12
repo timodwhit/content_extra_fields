@@ -1,7 +1,8 @@
 INTRODUCTION
 ------------
-Content Extra Fields removes the frustration of wondering where the links, comments
-and submitted variables are coming from and sets them in as extra fields.
+Content Extra Fields removes the frustration of wondering where the links,
+comments and submitted variables are coming from and sets them in as extra
+fields.
 
 
 REQUIREMENTS
@@ -23,10 +24,10 @@ CONFIGURATION
 
 FAQ
 ---
-Q: If I install this module, will all the instances be replaced.
+Q:  If I install this module, will all the instances be replaced.
 
-A: Yes. There is currently no selecting of which node types will have this module
-effec them.
+A:  Yes. There is currently no selecting of which node types will have this
+    module effect them.
 
 
 MAINTAINERS
