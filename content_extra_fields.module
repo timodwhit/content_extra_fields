@@ -17,11 +17,6 @@ function content_extra_fields_field_extra_fields() {
           'description' => t('Links typically found in the node.tpl'),
           'weight' => 100,
         ),
-        'content_extra_fields_comments' => array(
-          'label' => t('Comments'),
-          'description' => t('Comments typically found in the node.tpl'),
-          'weight' => 150,
-        ),
         'content_extra_fields_submitted' => array(
           'label' => t('Submitted'),
           'description' => t('Byline typically found in the node.tpl'),
@@ -29,6 +24,13 @@ function content_extra_fields_field_extra_fields() {
         ),
       ),
     );
+    if (module_exists('comment')) {
+      $extra['node'][$node_type]['display']['content_extra_fields_comments'] = array(
+        'label' => t('Comments'),
+        'description' => t('Comments typically found in the node.tpl'),
+        'weight' => 150,
+      );
+    }
   }
 
   return $extra;
